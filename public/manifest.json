@@ -1,0 +1,17 @@
+{
+  "name": "CoachSport",
+  "short_name": "CoachSport",
+  "description": "Tu Entrenador Personal",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#1a1a1a",
+  "theme_color": "#002b36",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

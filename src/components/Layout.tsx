@@ -105,8 +105,8 @@ export default function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <main className="flex-1 pb-20">
+    <div className="h-screen bg-background flex flex-col" style={{ height: '100dvh' }}>
+      <main className="flex-1 pb-20 overflow-y-auto">
         {children}
       </main>
 
