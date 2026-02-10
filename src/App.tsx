@@ -14,8 +14,11 @@ import WorkoutCompleteScreen from './screens/client/WorkoutCompleteScreen'
 import ProgressScreen from './screens/client/ProgressScreen'
 import ProfileScreen from './screens/client/ProfileScreen'
 import SettingsScreen from './screens/SettingsScreen'
+import SubscriptionScreen from './screens/SubscriptionScreen'
 import HelpScreen from './screens/HelpScreen'
 import MessagesScreen from './screens/MessagesScreen'
+import PrivacyScreen from './screens/PrivacyScreen'
+import AboutScreen from './screens/AboutScreen'
 import TrainerDashboardScreen from './screens/trainer/TrainerDashboardScreen'
 import TrainerClientsScreen from './screens/trainer/TrainerClientsScreen'
 import TrainerClientDetailScreen from './screens/trainer/TrainerClientDetailScreen'
@@ -51,8 +54,11 @@ function App() {
       <Route path="/progress" element={<Layout><ProgressScreen /></Layout>} />
       <Route path="/profile" element={<Layout><ProfileScreen /></Layout>} />
       <Route path="/settings" element={<Layout><SettingsScreen /></Layout>} />
+      <Route path="/subscriptions" element={<Layout><SubscriptionScreen /></Layout>} />
       <Route path="/help" element={<Layout><HelpScreen /></Layout>} />
       <Route path="/messages" element={<Layout><MessagesScreen /></Layout>} />
+      <Route path="/privacy" element={<Layout><PrivacyScreen /></Layout>} />
+      <Route path="/about" element={<Layout><AboutScreen /></Layout>} />
       
       {/* Trainer Routes */}
       <Route path="/trainer" element={<Layout><TrainerDashboardScreen /></Layout>} />

@@ -1,4 +1,4 @@
-import { ReactNode, useState, useEffect } from 'react'
+import { ReactNode, useState, useEffect, useMemo } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { useNavigate, useLocation } from 'react-router-dom'
 import {
@@ -76,8 +76,8 @@ export default function Layout({ children }: LayoutProps) {
 
   // Dividir items en grupos de 4
   const maxVisible = 4
-  const firstGroup = navItems.slice(0, maxVisible)
-  const remainingItems = navItems.slice(maxVisible)
+  const firstGroup = useMemo(() => navItems.slice(0, maxVisible), [navItems])
+  const remainingItems = useMemo(() => navItems.slice(maxVisible), [navItems])
   const hasMore = remainingItems.length > 0
 
   // Resetear showMore si la ruta activa está en el primer grupo (solo cuando navega, no cuando hace clic en "Más")
@@ -98,7 +98,7 @@ export default function Layout({ children }: LayoutProps) {
       }, 100)
       return () => clearTimeout(timer)
     }
-  }, [location.pathname])
+  }, [location.pathname, firstGroup, showMore])
 
   const handleItemClick = (path: string) => {
     navigate(path)

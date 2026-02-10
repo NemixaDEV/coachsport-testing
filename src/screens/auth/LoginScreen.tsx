@@ -109,7 +109,7 @@ export default function LoginScreen() {
                 <p className="text-foreground text-xs">Cliente: cliente3@coachsport.dev</p>
               </div>
               <p className="text-muted-foreground text-xs">
-                <span className="font-medium">Contraseña:</span> Cualquier contraseña funcionará
+                <span className="font-medium">Contraseña:</span> Cualquiera, por ejemplo: "1234"
               </p>
             </div>
           </div>

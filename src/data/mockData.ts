@@ -44,6 +44,13 @@ export const client1: User = {
     availableEquipment: ['barra', 'anillas', 'paralelas'],
   },
   trainerId: '1',
+  subscription: {
+    planId: 'pro',
+    startDate: new Date('2024-11-01'),
+    endDate: new Date('2024-12-01'),
+    isActive: true,
+    autoRenew: true,
+  },
   createdAt: new Date('2024-02-01'),
 };
 
@@ -65,6 +72,13 @@ export const client2: User = {
     availableEquipment: ['barra', 'suelo'],
   },
   trainerId: '2',
+  subscription: {
+    planId: 'full',
+    startDate: new Date('2024-10-15'),
+    endDate: new Date('2024-11-15'),
+    isActive: true,
+    autoRenew: true,
+  },
   createdAt: new Date('2024-02-10'),
 };
 
@@ -86,6 +100,13 @@ export const client3: User = {
     availableEquipment: ['barra', 'anillas', 'paralelas', 'suelo'],
   },
   trainerId: '1',
+  subscription: {
+    planId: 'basic',
+    startDate: new Date('2024-11-10'),
+    endDate: new Date('2024-12-10'),
+    isActive: true,
+    autoRenew: false,
+  },
   createdAt: new Date('2024-01-20'),
 };
 

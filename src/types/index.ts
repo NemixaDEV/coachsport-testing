@@ -23,6 +23,13 @@ export interface User {
     availableEquipment?: string[];
   };
   trainerId?: string;
+  subscription?: {
+    planId: 'basic' | 'pro' | 'full';
+    startDate: Date;
+    endDate: Date;
+    isActive: boolean;
+    autoRenew?: boolean;
+  };
   createdAt: Date;
 }
 

@@ -81,7 +81,7 @@ export default function ExercisesScreen() {
               onClick={() => setSelectedMuscle(muscle)}
               className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors border ${
                 selectedMuscle === muscle 
-                  ? 'bg-accent-positive text-foreground border-accent-positive' 
+                  ? 'bg-secondary text-foreground border-secondary' 
                   : 'text-muted-foreground border-border hover:opacity-80 hover:text-foreground'
               }`}
               style={selectedMuscle !== muscle ? { backgroundColor: 'var(--button-background)' } : {}}
