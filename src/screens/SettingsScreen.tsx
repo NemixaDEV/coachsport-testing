@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button';
 import { ArrowLeft, CreditCard, Trash2, AlertTriangle } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/hooks/useTheme';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function SettingsScreen() {
   const navigate = useNavigate();
@@ -14,6 +14,8 @@ export default function SettingsScreen() {
   const { isDarkMode, setDarkMode } = useTheme();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  
+  const isTrainer = user?.role === 'trainer' || user?.isTrainer;
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('es-AR', {
@@ -92,27 +94,29 @@ export default function SettingsScreen() {
           </div>
         </Card>
 
-        {/* Botón de Gestionar Suscripciones */}
-        <button
-          onClick={() => navigate('/subscriptions')}
-          className="w-full border border-border rounded-lg p-4 mb-4 hover:opacity-80 transition-colors flex items-center justify-between"
-          style={{ backgroundColor: 'var(--button-background)' }}
-        >
-          <div className="flex items-center">
-            <CreditCard size={24} className="text-muted-foreground mr-4" />
-            <div className="flex-1 text-left">
-              <span className="text-foreground font-semibold block">Gestionar Suscripciones</span>
-              {subscription && subscription.isActive ? (
-                <span className="text-muted-foreground text-xs">
-                  Plan {subscription.planId.charAt(0).toUpperCase() + subscription.planId.slice(1)} activo hasta {formatDate(subscription.endDate)}
-                </span>
-              ) : (
-                <span className="text-muted-foreground text-xs">No tienes un plan activo</span>
-              )}
+        {/* Botón de Gestionar Suscripciones - Solo para clientes, no para entrenadores */}
+        {!isTrainer && (
+          <button
+            onClick={() => navigate('/subscriptions')}
+            className="w-full border border-border rounded-lg p-4 mb-4 hover:opacity-80 transition-colors flex items-center justify-between"
+            style={{ backgroundColor: 'var(--button-background)' }}
+          >
+            <div className="flex items-center">
+              <CreditCard size={24} className="text-muted-foreground mr-4" />
+              <div className="flex-1 text-left">
+                <span className="text-foreground font-semibold block">Gestionar Suscripciones</span>
+                {subscription && subscription.isActive ? (
+                  <span className="text-muted-foreground text-xs">
+                    Plan {subscription.planId.charAt(0).toUpperCase() + subscription.planId.slice(1)} activo hasta {formatDate(subscription.endDate)}
+                  </span>
+                ) : (
+                  <span className="text-muted-foreground text-xs">No tienes un plan activo</span>
+                )}
+              </div>
             </div>
-          </div>
-          <span className="text-muted-foreground">›</span>
-        </button>
+            <span className="text-muted-foreground">›</span>
+          </button>
+        )}
 
         <button
           onClick={() => navigate('/privacy')}

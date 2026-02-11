@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { allUsers, routines } from '@/data/mockData';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';

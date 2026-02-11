@@ -9,6 +9,7 @@ import csLogoLetrasRojasFondoTransp from '@/assets/images/cs-logo-letras-rojas-f
 import csLogotipoBlancoAzul from '@/assets/images/cs-logotipo-blanco-azul-v1.png';
 import csLogotipoBlancoRojo from '@/assets/images/cs-logotipo-blanco-rojo-v1.png';
 import csLogotipoRojoAzul from '@/assets/images/cs-logotipo-rojo-azul-v1.png';
+import mercadoPagoLogo from '@/assets/images/mercado-pago-logo.jpg';
 
 export const images = {
     // Iconos
@@ -26,6 +27,9 @@ export const images = {
     logotipoBlancoAzul: csLogotipoBlancoAzul,
     logotipoBlancoRojo: csLogotipoBlancoRojo,
     logotipoRojoAzul: csLogotipoRojoAzul,
+
+    // Logos de pago
+    mercadoPagoLogo: mercadoPagoLogo,
 } as const;
 
 // Exportar también como default para facilitar el uso

@@ -43,6 +43,7 @@ export default {
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
       },
+      // Animaciones personalizadas se gestionan en CSS global (index.css)
     },
   },
   plugins: [],

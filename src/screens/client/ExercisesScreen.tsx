@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card } from '@/components/ui/Card';
 import { exercises } from '@/data/mockData';
-import { Search } from 'lucide-react';
+import { Search, ChevronDown } from 'lucide-react';
 import { Level } from '@/types';
 
 export default function ExercisesScreen() {
@@ -10,6 +10,8 @@ export default function ExercisesScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedLevel, setSelectedLevel] = useState<Level | 'all'>('all');
   const [selectedMuscle, setSelectedMuscle] = useState<string>('all');
+  const [isLevelExpanded, setIsLevelExpanded] = useState(false);
+  const [isMuscleExpanded, setIsMuscleExpanded] = useState(false);
 
   const levels: (Level | 'all')[] = ['all', 'beginner', 'intermediate', 'advanced'];
   const muscleGroups = ['all', ...new Set(exercises.flatMap(e => e.muscleGroups))];
@@ -55,42 +57,74 @@ export default function ExercisesScreen() {
           />
         </div>
 
-        <div className="flex gap-2 mb-4 overflow-x-auto pb-2">
-          {levels.map(level => (
+        <div className="space-y-3 mb-4">
+          {/* Filtro por nivel */}
+          <div>
             <button
-              key={level}
-              onClick={() => setSelectedLevel(level)}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors border ${
-                selectedLevel === level 
-                  ? 'bg-secondary text-foreground border-secondary' 
-                  : 'text-muted-foreground border-border hover:opacity-80 hover:text-foreground'
-              }`}
-              style={selectedLevel !== level ? { backgroundColor: 'var(--button-background)' } : {}}
+              onClick={() => setIsLevelExpanded(!isLevelExpanded)}
+              className="flex items-center justify-between w-full mb-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              <span className="text-sm font-medium">
-                {level === 'all' ? 'Todos' : getLevelLabel(level as Level)}
-              </span>
+              <span>Filtrar por NIVEL</span>
+              <ChevronDown
+                size={18}
+                className={`transition-transform duration-200 ${isLevelExpanded ? 'rotate-180' : ''}`}
+              />
             </button>
-          ))}
-        </div>
+            {isLevelExpanded && (
+              <div className="flex flex-wrap gap-2">
+                {levels.map(level => (
+                  <button
+                    key={level}
+                    onClick={() => setSelectedLevel(level)}
+                    className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors border ${
+                      selectedLevel === level 
+                        ? 'bg-secondary text-foreground border-secondary' 
+                        : 'text-muted-foreground border-border hover:opacity-80 hover:text-foreground'
+                    }`}
+                    style={selectedLevel !== level ? { backgroundColor: 'var(--button-background)' } : {}}
+                  >
+                    <span className="text-sm font-medium">
+                      {level === 'all' ? 'Todos' : getLevelLabel(level as Level)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
 
-        <div className="flex gap-2 overflow-x-auto pb-2">
-          {muscleGroups.slice(0, 6).map(muscle => (
+          {/* Filtro por grupo muscular */}
+          <div>
             <button
-              key={muscle}
-              onClick={() => setSelectedMuscle(muscle)}
-              className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors border ${
-                selectedMuscle === muscle 
-                  ? 'bg-secondary text-foreground border-secondary' 
-                  : 'text-muted-foreground border-border hover:opacity-80 hover:text-foreground'
-              }`}
-              style={selectedMuscle !== muscle ? { backgroundColor: 'var(--button-background)' } : {}}
+              onClick={() => setIsMuscleExpanded(!isMuscleExpanded)}
+              className="flex items-center justify-between w-full mb-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
             >
-              <span className="text-sm font-medium">
-                {muscle === 'all' ? 'Todos' : muscle}
-              </span>
+              <span>Filtrar por GRUPO MUSCULAR</span>
+              <ChevronDown
+                size={18}
+                className={`transition-transform duration-200 ${isMuscleExpanded ? 'rotate-180' : ''}`}
+              />
             </button>
-          ))}
+            {isMuscleExpanded && (
+              <div className="flex flex-wrap gap-2">
+                {muscleGroups.map(muscle => (
+                  <button
+                    key={muscle}
+                    onClick={() => setSelectedMuscle(muscle)}
+                    className={`px-4 py-2 rounded-lg whitespace-nowrap transition-colors border ${
+                      selectedMuscle === muscle 
+                        ? 'bg-secondary text-foreground border-secondary' 
+                        : 'text-muted-foreground border-border hover:opacity-80 hover:text-foreground'
+                    }`}
+                    style={selectedMuscle !== muscle ? { backgroundColor: 'var(--button-background)' } : {}}
+                  >
+                    <span className="text-sm font-medium">
+                      {muscle === 'all' ? 'Todos' : muscle}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
 

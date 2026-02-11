@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { allUsers } from '@/data/mockData';
 import { Card } from '@/components/ui/Card';
 import { ArrowLeft } from 'lucide-react';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { progressData, exercises, workouts } from '@/data/mockData';
 import { Card } from '@/components/ui/Card';
 import { Tab } from '@/components/ui/Tab';

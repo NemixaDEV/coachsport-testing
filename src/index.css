@@ -279,3 +279,31 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
+
+/* Animación simple para la barra de carga de la splash */
+@keyframes loading-bar {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(200%);
+  }
+}
+
+.loading-bar {
+  animation: loading-bar 1.4s linear infinite;
+}
+
+/* Transición profesional para la splash screen */
+.splash-screen {
+  transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 1;
+  transform: scale(1);
+}
+
+.splash-screen.splash-exit {
+  opacity: 0;
+  transform: scale(0.95);
+  pointer-events: none;
+}

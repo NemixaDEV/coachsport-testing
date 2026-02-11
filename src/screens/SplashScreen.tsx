@@ -1,11 +1,13 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/contexts/SubscriptionContext';
 import { images } from '@/constants/images';
 
 export default function SplashScreen() {
   const navigate = useNavigate();
   const { isAuthenticated, loading, user } = useAuth();
+  const { hasActiveSubscription } = useSubscription();
 
   useEffect(() => {
     if (!loading) {
@@ -17,7 +19,13 @@ export default function SplashScreen() {
           } else if (user.role === 'trainer' || user.isTrainer) {
             navigate('/trainer');
           } else {
-            navigate('/home');
+            // Si es cliente, verificar si tiene suscripción activa
+            if (hasActiveSubscription) {
+              navigate('/home');
+            } else {
+              // Cliente sin suscripción activa, redirigir a perfil
+              navigate('/profile');
+            }
           }
         } else {
           navigate('/login');
@@ -53,13 +61,23 @@ export default function SplashScreen() {
       />
 
       {/* Contenido */}
-      <div className="relative z-10 text-center">
+      <div className="relative z-10 flex flex-col items-center text-center">
         <img
           src={images.logoLetrasRojasFondoTransp}
           alt="CoachSport Logo"
           className="mb-6 mx-auto max-w-xs drop-shadow-2xl"
         />
         <p className="text-white text-base drop-shadow-lg">Tu entrenador personal</p>
+
+        {/* Loading profesional mientras se carga la app */}
+        <div className="mt-10 flex flex-col items-center gap-3 w-full max-w-xs px-4">
+          <p className="text-sm text-white/80 mb-2">Cargando...</p>
+          {/* Barra de carga horizontal */}
+          <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden relative">
+            {/* Efecto tipo spinner horizontal - onda que se mueve continuamente */}
+            <div className="absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-[#ff3b30] via-[#ff5a4f] to-[#ff6b5f] rounded-full loading-bar" />
+          </div>
+        </div>
       </div>
     </div>
   );

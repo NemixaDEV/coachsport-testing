@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { useTheme } from '@/hooks/useTheme';
 import { images } from '@/constants/images';
 
@@ -14,6 +15,7 @@ export default function LoginScreen() {
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showDemoCredentials, setShowDemoCredentials] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,14 +30,26 @@ export default function LoginScreen() {
     try {
       const user = await login(email, password);
       if (user) {
-        localStorage.setItem('user', JSON.stringify(user));
+        // El usuario ya se guarda en localStorage dentro de AuthContext.login
+        // Para clientes, verificar suscripción directamente del usuario
         // Redirigir según el rol
         if (user.role === 'admin') {
           navigate('/admin');
         } else if (user.role === 'trainer' || user.isTrainer) {
           navigate('/trainer');
         } else {
-          navigate('/home');
+          // Si es cliente, verificar si tiene suscripción activa
+          const hasSub = user.subscription &&
+            user.subscription.isActive &&
+            new Date() >= new Date(user.subscription.startDate) &&
+            new Date() <= new Date(user.subscription.endDate);
+
+          if (hasSub) {
+            navigate('/home');
+          } else {
+            // Cliente sin suscripción activa, redirigir a perfil
+            navigate('/profile');
+          }
         }
       } else {
         setError('Credenciales incorrectas');
@@ -78,6 +92,11 @@ export default function LoginScreen() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <div className="text-right mb-4">
+            <Link to="/forgot-password" className="text-sm text-cinnabar hover:underline">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          </div>
           {error && (
             <p className="text-cinnabar text-sm mb-4">{error}</p>
           )}
@@ -96,23 +115,62 @@ export default function LoginScreen() {
         </div>
 
         {/* Demo credentials */}
-        <div className="mt-8 p-4 bg-muted rounded-lg border border-border">
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">ℹ️</span>
-            <div className="flex-1">
-              <p className="text-foreground text-sm font-semibold mb-2">Credenciales de prueba</p>
-              <div className="space-y-1 mb-3">
-                <p className="text-foreground text-xs">Admin: admin@coachsport.dev</p>
-                <p className="text-foreground text-xs">Entrenador: trainer@coachsport.dev</p>
-                <p className="text-foreground text-xs">Cliente: cliente1@coachsport.dev</p>
-                <p className="text-foreground text-xs">Cliente: cliente2@coachsport.dev</p>
-                <p className="text-foreground text-xs">Cliente: cliente3@coachsport.dev</p>
-              </div>
-              <p className="text-muted-foreground text-xs">
-                <span className="font-medium">Contraseña:</span> Cualquiera, por ejemplo: "1234"
-              </p>
+        <div className="mt-8 bg-muted rounded-lg border border-border overflow-hidden">
+          <button
+            onClick={() => setShowDemoCredentials(!showDemoCredentials)}
+            className="w-full p-4 flex items-center justify-between hover:bg-muted/80 transition-colors"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-2xl">🚨</span>
+              <p className="text-foreground text-sm font-semibold">Datos de Cuentas de Prueba</p>
             </div>
-          </div>
+            {showDemoCredentials ? (
+              <ChevronUp size={20} className="text-muted-foreground" />
+            ) : (
+              <ChevronDown size={20} className="text-muted-foreground" />
+            )}
+          </button>
+
+          {showDemoCredentials && (
+            <div className="px-4 pb-4">
+              <div className="space-y-1 mb-1">
+                <div>
+                  <p className="text-foreground text-xs font-medium">👤 Administrador</p>
+                  <p className="text-foreground text-sm font-mono bg-background/50 px-2 py-1 rounded">admin@coachsport.dev</p>
+                </div>
+                <div>
+                  <p className="text-foreground text-xs font-medium">🏋️ Entrenador</p>
+                  <p className="text-foreground text-sm font-mono bg-background/50 px-2 py-1 rounded">trainer@coachsport.dev</p>
+                </div>
+                <div>
+                  <p className="text-foreground text-xs font-medium">1️⃣ Cliente - Sin suscripción</p>
+                  <p className="text-foreground text-sm font-mono bg-background/50 px-2 py-1 rounded">cliente1@coachsport.dev</p>
+                </div>
+                <div>
+                  <p className="text-foreground text-xs font-medium">2️⃣ Cliente - Plan PRO</p>
+                  <p className="text-foreground text-sm font-mono bg-background/50 px-2 py-1 rounded">cliente2@coachsport.dev</p>
+                </div>
+                <div>
+                  <p className="text-foreground text-xs font-medium">3️⃣ Cliente - Plan FULL</p>
+                  <p className="text-foreground text-sm font-mono bg-background/50 px-2 py-1 rounded">cliente3@coachsport.dev</p>
+                </div>
+              </div>
+              <div className="pt-3 border-t border-border">
+                <p className="text-muted-foreground text-xs">
+                  <span className="font-medium text-foreground">🔐 Contraseña:</span> Cualquiera funciona (ej: "1234")
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Contact button */}
+        <div className="mt-8 text-center">
+          <Link to="/contact">
+            <Button variant="outline" className="w-full">
+              Contáctanos
+            </Button>
+          </Link>
         </div>
       </div>
     </div>

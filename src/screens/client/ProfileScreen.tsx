@@ -1,16 +1,50 @@
+import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
 import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Settings, HelpCircle, MessageSquare, LogOut } from 'lucide-react';
+import { Settings, HelpCircle, MessageSquare, LogOut, Camera } from 'lucide-react';
 
 export default function ProfileScreen() {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+
+  const handleImageClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validar que sea una imagen
+      if (!file.type.startsWith('image/')) {
+        alert('Por favor, selecciona un archivo de imagen válido');
+        return;
+      }
+
+      // Validar tamaño (máximo 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('La imagen no debe superar los 5MB');
+        return;
+      }
+
+      // Crear preview
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setAvatarPreview(reader.result as string);
+        // TODO: Aquí se subiría la imagen al servidor
+        // Por ahora solo mostramos el preview
+        console.log('Imagen seleccionada:', file.name);
+      };
+      reader.readAsDataURL(file);
+    }
   };
 
   return (
@@ -22,14 +56,30 @@ export default function ProfileScreen() {
       <div className="px-6 mb-6">
         <Card>
           <div className="text-center mb-6">
-            <div className="w-24 h-24 border border-border rounded-full flex items-center justify-center mx-auto mb-4" style={{ backgroundColor: 'var(--card-background)' }}>
-              {user?.avatar ? (
-                <img src={user.avatar} alt={user.name} className="w-full h-full rounded-full" />
-              ) : (
-                <span className="text-foreground text-3xl font-bold">
-                  {user?.name.charAt(0).toUpperCase()}
-                </span>
-              )}
+            <div className="relative inline-block mb-4">
+              <div className="w-24 h-24 border border-border rounded-full flex items-center justify-center mx-auto overflow-hidden" style={{ backgroundColor: 'var(--card-background)' }}>
+                {avatarPreview || user?.avatar ? (
+                  <img src={avatarPreview || user?.avatar} alt={user?.name} className="w-full h-full rounded-full object-cover" />
+                ) : (
+                  <span className="text-foreground text-3xl font-bold">
+                    {user?.name.charAt(0).toUpperCase()}
+                  </span>
+                )}
+              </div>
+              <button
+                onClick={handleImageClick}
+                className="absolute bottom-0 right-0 w-8 h-8 bg-cinnabar rounded-full flex items-center justify-center border-2 border-background hover:bg-[#E1322A] transition-colors shadow-lg"
+                title="Cambiar foto de perfil"
+              >
+                <Camera size={16} className="text-foreground" />
+              </button>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageChange}
+                className="hidden"
+              />
             </div>
             <h2 className="text-foreground text-2xl font-bold mb-1">{user?.name}</h2>
             <p className="text-muted-foreground">{user?.email}</p>

@@ -4,7 +4,8 @@ import { Card } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
 import { ArrowLeft, CreditCard, Check, Crown, Zap, Star, Calendar } from 'lucide-react';
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/contexts/AuthContext';
+import { images } from '@/constants/images';
 
 interface SubscriptionPlan {
   id: string;
@@ -279,10 +280,11 @@ export default function SubscriptionScreen() {
         <div className="text-center">
           <div className="mb-6 flex justify-center">
             {/* Logo de MercadoPago */}
-            <div className="flex flex-col items-center">
-              <span className="text-foreground text-2xl font-bold">Mercado</span>
-              <span className="text-[#009EE3] text-2xl font-bold">Pago</span>
-            </div>
+            <img
+              src={images.mercadoPagoLogo}
+              alt="Mercado Pago"
+              className="max-w-[200px] h-auto"
+            />
           </div>
           
           <h3 className="text-foreground text-lg font-bold mb-3">

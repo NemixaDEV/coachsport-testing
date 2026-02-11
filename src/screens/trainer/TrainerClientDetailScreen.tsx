@@ -75,7 +75,11 @@ export default function TrainerClientDetailScreen() {
         >
           Crear Nueva Rutina
         </Button>
-        <Button variant="secondary" onClick={() => {}} className="w-full">
+        <Button 
+          variant="secondary" 
+          onClick={() => navigate(`/conversation/${client.id}`)} 
+          className="w-full"
+        >
           Enviar Mensaje
         </Button>
       </div>

@@ -1,4 +1,4 @@
-import { User, Exercise, Routine, Workout, Progress } from '@/types';
+import { User, Exercise, Routine, Workout, Progress, Message } from '@/types';
 
 // Usuario administrador y entrenador (dueño del negocio)
 export const adminUser: User = {
@@ -26,7 +26,7 @@ export const trainerUser: User = {
   createdAt: new Date('2024-01-15'),
 };
 
-// Cliente 1
+// Cliente 1 - Sin suscripción activa (expirada)
 export const client1: User = {
   id: '3',
   email: 'cliente1@coachsport.dev',
@@ -45,16 +45,16 @@ export const client1: User = {
   },
   trainerId: '1',
   subscription: {
-    planId: 'pro',
-    startDate: new Date('2024-11-01'),
-    endDate: new Date('2024-12-01'),
-    isActive: true,
-    autoRenew: true,
+    planId: 'basic',
+    startDate: new Date('2024-10-01'),
+    endDate: new Date('2025-11-01'), // Suscripción expirada
+    isActive: false, // No activa
+    autoRenew: false,
   },
   createdAt: new Date('2024-02-01'),
 };
 
-// Cliente 2
+// Cliente 2 - Con suscripción activa NO recurrente
 export const client2: User = {
   id: '4',
   email: 'cliente2@coachsport.dev',
@@ -73,16 +73,16 @@ export const client2: User = {
   },
   trainerId: '2',
   subscription: {
-    planId: 'full',
-    startDate: new Date('2024-10-15'),
-    endDate: new Date('2024-11-15'),
+    planId: 'pro',
+    startDate: new Date('2025-01-01'), // Suscripción iniciada en enero 2025
+    endDate: new Date('2026-12-31'), // Suscripción activa hasta diciembre 2026
     isActive: true,
-    autoRenew: true,
+    autoRenew: false, // NO recurrente
   },
   createdAt: new Date('2024-02-10'),
 };
 
-// Cliente 3
+// Cliente 3 - Con suscripción activa recurrente
 export const client3: User = {
   id: '5',
   email: 'cliente3@coachsport.dev',
@@ -101,11 +101,11 @@ export const client3: User = {
   },
   trainerId: '1',
   subscription: {
-    planId: 'basic',
-    startDate: new Date('2024-11-10'),
-    endDate: new Date('2024-12-10'),
+    planId: 'full',
+    startDate: new Date('2025-01-01'), // Suscripción iniciada en enero 2025
+    endDate: new Date('2026-12-31'), // Suscripción activa hasta diciembre 2026
     isActive: true,
-    autoRenew: false,
+    autoRenew: true, // Recurrente
   },
   createdAt: new Date('2024-01-20'),
 };
@@ -481,5 +481,392 @@ export const progressData: Progress[] = [
     date: new Date('2024-02-15'),
     reps: 8,
     sets: 4,
+  },
+];
+
+// Mensajes entre entrenadores y clientes
+export const messages: Message[] = [
+  // Conversación entre Leo (admin/entrenador) y María (cliente1)
+  {
+    id: '1',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: '¡Hola Leo! Tengo una duda sobre las dominadas. ¿Cuándo crees que podré hacer una completa sin ayuda?',
+    timestamp: new Date('2024-02-10T10:30:00'),
+    read: true,
+  },
+  {
+    id: '2',
+    fromId: '1', // Leo
+    toId: '3', // María
+    content: 'Hola María! Estás progresando muy bien. Con tu ritmo actual, calculo que en unas 3-4 semanas podrás hacer tu primera dominada completa. Sigue enfocándote en las dominadas asistidas y los ejercicios de fortalecimiento de espalda.',
+    timestamp: new Date('2024-02-10T11:15:00'),
+    read: true,
+  },
+  {
+    id: '3',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: 'Genial, eso me motiva mucho! ¿Debería aumentar las repeticiones o agregar más series?',
+    timestamp: new Date('2024-02-10T11:45:00'),
+    read: true,
+  },
+  {
+    id: '4',
+    fromId: '1', // Leo
+    toId: '3', // María
+    content: 'Por ahora mantén las series actuales pero enfócate en la calidad del movimiento. Cuando puedas hacer 3 series de 8 reps limpias, subiremos la intensidad 💪',
+    timestamp: new Date('2024-02-10T14:20:00'),
+    read: true,
+  },
+  {
+    id: '5',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: 'Perfecto, ¡muchas gracias por el consejo!',
+    timestamp: new Date('2024-02-10T14:35:00'),
+    read: true,
+  },
+  {
+    id: '6',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: 'Hey Leo, he notado que me duele un poco el hombro derecho después de hacer flexiones. ¿Es normal?',
+    timestamp: new Date('2024-02-15T09:00:00'),
+    read: true,
+  },
+  {
+    id: '7',
+    fromId: '1', // Leo
+    toId: '3', // María
+    content: 'María, el dolor no es normal. Puede ser un tema de técnica. ¿Puedes grabar un vídeo de tus flexiones en la próxima sesión? Así puedo ver tu forma y corregir si es necesario.',
+    timestamp: new Date('2024-02-15T09:30:00'),
+    read: true,
+  },
+  {
+    id: '8',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: 'Claro, lo haré mañana en mi entrenamiento. Por mientras, ¿debería evitar las flexiones?',
+    timestamp: new Date('2024-02-15T10:00:00'),
+    read: true,
+  },
+  {
+    id: '9',
+    fromId: '1', // Leo
+    toId: '3', // María
+    content: 'Sí, mejor descansa ese ejercicio hasta que veamos el vídeo. Puedes hacer plancha y trabajo de core mientras tanto. Y si el dolor persiste, consulta con un fisio.',
+    timestamp: new Date('2024-02-15T10:15:00'),
+    read: true,
+  },
+  {
+    id: '10',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: 'Vale, te envío el vídeo mañana. ¡Gracias!',
+    timestamp: new Date('2024-02-15T10:20:00'),
+    read: true,
+  },
+  {
+    id: '11',
+    fromId: '3', // María
+    toId: '1', // Leo
+    content: 'Leo, ya me siento mejor del hombro. Seguí tus recomendaciones y ha mejorado mucho. ¿Puedo volver a las flexiones?',
+    timestamp: new Date('2024-02-19T16:00:00'),
+    read: false,
+  },
+
+  // Conversación entre Ana (entrenador) y Juan (cliente2)
+  {
+    id: '12',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: 'Hola Ana! Estoy muy contento con la rutina. Ya veo cambios después de solo 3 semanas 😊',
+    timestamp: new Date('2024-02-12T18:30:00'),
+    read: true,
+  },
+  {
+    id: '13',
+    fromId: '2', // Ana
+    toId: '4', // Juan
+    content: '¡Qué bueno Juan! Me alegra mucho escuchar eso. El esfuerzo que estás poniendo se nota. ¿Cómo te sientes con las sentadillas?',
+    timestamp: new Date('2024-02-12T19:00:00'),
+    read: true,
+  },
+  {
+    id: '14',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: 'Las sentadillas van bien, aunque a veces siento que pierdo el equilibrio al bajar. ¿Algún consejo?',
+    timestamp: new Date('2024-02-12T19:30:00'),
+    read: true,
+  },
+  {
+    id: '15',
+    fromId: '2', // Ana
+    toId: '4', // Juan
+    content: 'Es común al principio. Prueba esto: mantén la mirada al frente (no hacia abajo), y concéntrate en empujar con los talones al subir. También asegúrate de que tus rodillas vayan en la misma dirección que tus pies.',
+    timestamp: new Date('2024-02-12T20:00:00'),
+    read: true,
+  },
+  {
+    id: '16',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: 'Lo probaré en el próximo entrenamiento. Otra pregunta: ¿puedo hacer cardio los días que no entreno?',
+    timestamp: new Date('2024-02-12T20:15:00'),
+    read: true,
+  },
+  {
+    id: '17',
+    fromId: '2', // Ana
+    toId: '4', // Juan
+    content: 'Sí, claro! De hecho es muy recomendable. Puedes hacer 20-30 minutos de cardio ligero (caminar, bici) los días de descanso. Te ayudará con la recuperación y tu objetivo de perder grasa.',
+    timestamp: new Date('2024-02-12T20:30:00'),
+    read: true,
+  },
+  {
+    id: '18',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: '¡Perfecto! Empezaré a caminar en las mañanas entonces.',
+    timestamp: new Date('2024-02-12T20:45:00'),
+    read: true,
+  },
+  {
+    id: '19',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: 'Ana, una consulta: ¿cuándo crees que podré intentar hacer dominadas? Ahora mismo no puedo hacer ni una.',
+    timestamp: new Date('2024-02-16T10:00:00'),
+    read: true,
+  },
+  {
+    id: '20',
+    fromId: '2', // Ana
+    toId: '4', // Juan
+    content: 'Juan, las dominadas requieren bastante fuerza. Primero necesitamos fortalecer tu espalda y brazos con otros ejercicios. En unas 6-8 semanas podemos empezar con dominadas asistidas.',
+    timestamp: new Date('2024-02-16T11:00:00'),
+    read: true,
+  },
+  {
+    id: '21',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: 'Entendido, seré paciente. ¿Hay algún ejercicio específico que me ayude a prepararme?',
+    timestamp: new Date('2024-02-16T11:30:00'),
+    read: true,
+  },
+  {
+    id: '22',
+    fromId: '2', // Ana
+    toId: '4', // Juan
+    content: 'Sí! Vamos a agregar remo australiano y dead hangs (colgarse de la barra) a tu rutina. Esos te prepararán perfectamente para las dominadas.',
+    timestamp: new Date('2024-02-16T12:00:00'),
+    read: true,
+  },
+  {
+    id: '23',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: '¡Genial! Muchas gracias Ana, eres una excelente entrenadora 😊',
+    timestamp: new Date('2024-02-16T12:15:00'),
+    read: true,
+  },
+  {
+    id: '24',
+    fromId: '4', // Juan
+    toId: '2', // Ana
+    content: 'Hola Ana! Ya completé el entrenamiento de hoy. Las sentadillas mejoraron mucho siguiendo tus consejos sobre el equilibrio.',
+    timestamp: new Date('2024-02-19T19:00:00'),
+    read: false,
+  },
+
+  // Conversación entre Leo (admin/entrenador) y Sofía (cliente3)
+  {
+    id: '25',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Leo, ¿podemos aumentar la dificultad de la rutina? Siento que ya no me cuesta tanto.',
+    timestamp: new Date('2024-02-08T14:00:00'),
+    read: true,
+  },
+  {
+    id: '26',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: 'Claro Sofía! Estás lista para el siguiente nivel. Voy a modificar tu rutina para incluir ejercicios más avanzados. ¿Te interesa probar el front lever?',
+    timestamp: new Date('2024-02-08T15:00:00'),
+    read: true,
+  },
+  {
+    id: '27',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: '¡Sí! He estado viendo videos y me encantaría aprenderlo. ¿Empezamos con las progresiones?',
+    timestamp: new Date('2024-02-08T15:30:00'),
+    read: true,
+  },
+  {
+    id: '28',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: 'Perfecto. Empezaremos con tuck front lever. Es importante que domines cada progresión antes de avanzar. Te prepararé una rutina específica para mañana.',
+    timestamp: new Date('2024-02-08T16:00:00'),
+    read: true,
+  },
+  {
+    id: '29',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: '¡Excelente! Estoy muy emocionada. ¿Necesito algún equipo adicional?',
+    timestamp: new Date('2024-02-08T16:15:00'),
+    read: true,
+  },
+  {
+    id: '30',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: 'No, con la barra que ya tienes es suficiente. También sería útil tener magnesio para las manos, pero no es obligatorio.',
+    timestamp: new Date('2024-02-08T16:30:00'),
+    read: true,
+  },
+  {
+    id: '31',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Ok, conseguiré magnesio. ¡Gracias!',
+    timestamp: new Date('2024-02-08T16:45:00'),
+    read: true,
+  },
+  {
+    id: '32',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Leo, hice mi primer tuck front lever de 5 segundos hoy! 🎉',
+    timestamp: new Date('2024-02-13T18:00:00'),
+    read: true,
+  },
+  {
+    id: '33',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: '¡Increíble Sofía! 🎉 Eso es un gran logro. Sigue así y pronto estarás haciendo el full front lever. Tu progreso es impresionante.',
+    timestamp: new Date('2024-02-13T18:30:00'),
+    read: true,
+  },
+  {
+    id: '34',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Muchas gracias por tu apoyo constante. Realmente me ayuda a mantenerme motivada.',
+    timestamp: new Date('2024-02-13T19:00:00'),
+    read: true,
+  },
+  {
+    id: '35',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Hey Leo! Tengo una competencia de calistenia en 2 meses. ¿Crees que debería adaptar mi entrenamiento?',
+    timestamp: new Date('2024-02-17T10:00:00'),
+    read: true,
+  },
+  {
+    id: '36',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: 'Wow, eso es genial! Sí, definitivamente deberíamos ajustar tu entrenamiento para prepararte. ¿Qué categoría es?',
+    timestamp: new Date('2024-02-17T10:30:00'),
+    read: true,
+  },
+  {
+    id: '37',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Es categoría freestyle avanzado. Tengo que preparar una rutina de 2 minutos con skills estáticos y dinámicos.',
+    timestamp: new Date('2024-02-17T11:00:00'),
+    read: true,
+  },
+  {
+    id: '38',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: 'Perfecto! Vamos a crear un plan específico de competición. Nos enfocaremos en pulir tus skills actuales y agregar algunos combos impresionantes. ¿Cuándo podemos hacer una sesión de planificación?',
+    timestamp: new Date('2024-02-17T11:30:00'),
+    read: true,
+  },
+  {
+    id: '39',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: '¿Qué tal mañana a las 5pm? Tengo todo el tiempo del mundo.',
+    timestamp: new Date('2024-02-17T12:00:00'),
+    read: true,
+  },
+  {
+    id: '40',
+    fromId: '1', // Leo
+    toId: '5', // Sofía
+    content: 'Perfecto! Nos vemos mañana a las 5pm. Prepara una lista de los movimientos que quieres incluir en tu rutina.',
+    timestamp: new Date('2024-02-17T12:15:00'),
+    read: true,
+  },
+  {
+    id: '41',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Listo! Nos vemos mañana. Gracias por todo tu apoyo 😊',
+    timestamp: new Date('2024-02-17T12:30:00'),
+    read: true,
+  },
+  {
+    id: '42',
+    fromId: '5', // Sofía
+    toId: '1', // Leo
+    content: 'Leo, la sesión de ayer fue increíble. Ya tengo muchas ideas para mi rutina de competición. ¿Empezamos a practicar desde mañana?',
+    timestamp: new Date('2024-02-19T09:00:00'),
+    read: false,
+  },
+
+  // Conversación adicional de seguimiento general
+  {
+    id: '43',
+    fromId: '2', // Ana
+    toId: '1', // Leo (admin)
+    content: 'Leo, Juan está progresando muy bien. ¿Has visto sus últimos entrenamientos? Creo que está listo para una rutina intermedia en un mes.',
+    timestamp: new Date('2024-02-18T16:00:00'),
+    read: true,
+  },
+  {
+    id: '44',
+    fromId: '1', // Leo
+    toId: '2', // Ana
+    content: 'Sí, lo he visto! Está haciendo un trabajo excepcional. Y tú también Ana, excelente seguimiento. Sigamos con el plan actual y en un mes evaluamos el cambio.',
+    timestamp: new Date('2024-02-18T17:00:00'),
+    read: true,
+  },
+  {
+    id: '45',
+    fromId: '2', // Ana
+    toId: '1', // Leo
+    content: 'Perfecto! También quería comentarte que María me preguntó si puedo darle algunas clases. ¿Tienes inconveniente?',
+    timestamp: new Date('2024-02-18T17:30:00'),
+    read: true,
+  },
+  {
+    id: '46',
+    fromId: '1', // Leo
+    toId: '2', // Ana
+    content: 'Claro que no! De hecho sería genial. María puede beneficiarse de tu experiencia en movilidad. Coordinen directamente.',
+    timestamp: new Date('2024-02-18T18:00:00'),
+    read: true,
+  },
+  {
+    id: '47',
+    fromId: '2', // Ana
+    toId: '1', // Leo
+    content: '¡Genial! Se lo confirmo entonces. Gracias Leo.',
+    timestamp: new Date('2024-02-18T18:15:00'),
+    read: true,
   },
 ];

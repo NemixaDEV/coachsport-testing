@@ -1,9 +1,12 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { useAuth } from './hooks/useAuth'
+import { useAuth } from './contexts/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
 import SplashScreen from './screens/SplashScreen'
 import LoginScreen from './screens/auth/LoginScreen'
 import RegisterScreen from './screens/auth/RegisterScreen'
 import ProfileSetupScreen from './screens/auth/ProfileSetupScreen'
+import ForgotPasswordScreen from './screens/auth/ForgotPasswordScreen'
+import ContactScreen from './screens/auth/ContactScreen'
 import HomeScreen from './screens/client/HomeScreen'
 import ExercisesScreen from './screens/client/ExercisesScreen'
 import ExerciseDetailScreen from './screens/client/ExerciseDetailScreen'
@@ -17,6 +20,7 @@ import SettingsScreen from './screens/SettingsScreen'
 import SubscriptionScreen from './screens/SubscriptionScreen'
 import HelpScreen from './screens/HelpScreen'
 import MessagesScreen from './screens/MessagesScreen'
+import ConversationScreen from './screens/ConversationScreen'
 import PrivacyScreen from './screens/PrivacyScreen'
 import AboutScreen from './screens/AboutScreen'
 import TrainerDashboardScreen from './screens/trainer/TrainerDashboardScreen'
@@ -29,36 +33,36 @@ import AdminClientsScreen from './screens/admin/AdminClientsScreen'
 import AdminExercisesScreen from './screens/admin/AdminExercisesScreen'
 import Layout from './components/Layout'
 
-function App() {
-  const { loading } = useAuth()
-
-  if (loading) {
-    return <SplashScreen />
-  }
-
+function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<SplashScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
+      <Route path="/forgot-password" element={<ForgotPasswordScreen />} />
+      <Route path="/contact" element={<ContactScreen />} />
       <Route path="/profile-setup" element={<ProfileSetupScreen />} />
       
       {/* Client Routes */}
-      <Route path="/home" element={<Layout><HomeScreen /></Layout>} />
-      <Route path="/exercises" element={<Layout><ExercisesScreen /></Layout>} />
-      <Route path="/exercise/:id" element={<Layout><ExerciseDetailScreen /></Layout>} />
-      <Route path="/routines" element={<Layout><RoutinesScreen /></Layout>} />
-      <Route path="/routine/:id" element={<Layout><RoutineDetailScreen /></Layout>} />
-      <Route path="/workout/:id" element={<Layout><WorkoutScreen /></Layout>} />
-      <Route path="/workout/:id/complete" element={<Layout><WorkoutCompleteScreen /></Layout>} />
-      <Route path="/progress" element={<Layout><ProgressScreen /></Layout>} />
-      <Route path="/profile" element={<Layout><ProfileScreen /></Layout>} />
-      <Route path="/settings" element={<Layout><SettingsScreen /></Layout>} />
-      <Route path="/subscriptions" element={<Layout><SubscriptionScreen /></Layout>} />
-      <Route path="/help" element={<Layout><HelpScreen /></Layout>} />
-      <Route path="/messages" element={<Layout><MessagesScreen /></Layout>} />
-      <Route path="/privacy" element={<Layout><PrivacyScreen /></Layout>} />
-      <Route path="/about" element={<Layout><AboutScreen /></Layout>} />
+      {/* Rutas protegidas que requieren suscripción activa */}
+      <Route path="/home" element={<Layout><ProtectedRoute><HomeScreen /></ProtectedRoute></Layout>} />
+      <Route path="/exercises" element={<Layout><ProtectedRoute><ExercisesScreen /></ProtectedRoute></Layout>} />
+      <Route path="/exercise/:id" element={<Layout><ProtectedRoute><ExerciseDetailScreen /></ProtectedRoute></Layout>} />
+      <Route path="/routines" element={<Layout><ProtectedRoute><RoutinesScreen /></ProtectedRoute></Layout>} />
+      <Route path="/routine/:id" element={<Layout><ProtectedRoute><RoutineDetailScreen /></ProtectedRoute></Layout>} />
+      <Route path="/workout/:id" element={<Layout><ProtectedRoute><WorkoutScreen /></ProtectedRoute></Layout>} />
+      <Route path="/workout/:id/complete" element={<Layout><ProtectedRoute><WorkoutCompleteScreen /></ProtectedRoute></Layout>} />
+      <Route path="/progress" element={<Layout><ProtectedRoute><ProgressScreen /></ProtectedRoute></Layout>} />
+      <Route path="/messages" element={<Layout><ProtectedRoute><MessagesScreen /></ProtectedRoute></Layout>} />
+      <Route path="/conversation/:userId" element={<Layout><ProtectedRoute><ConversationScreen /></ProtectedRoute></Layout>} />
+      
+      {/* Rutas accesibles sin suscripción activa */}
+      <Route path="/profile" element={<Layout><ProtectedRoute requireSubscription={false}><ProfileScreen /></ProtectedRoute></Layout>} />
+      <Route path="/subscriptions" element={<Layout><ProtectedRoute requireSubscription={false}><SubscriptionScreen /></ProtectedRoute></Layout>} />
+      <Route path="/settings" element={<Layout><ProtectedRoute requireSubscription={false}><SettingsScreen /></ProtectedRoute></Layout>} />
+      <Route path="/help" element={<Layout><ProtectedRoute requireSubscription={false}><HelpScreen /></ProtectedRoute></Layout>} />
+      <Route path="/privacy" element={<Layout><ProtectedRoute requireSubscription={false}><PrivacyScreen /></ProtectedRoute></Layout>} />
+      <Route path="/about" element={<Layout><ProtectedRoute requireSubscription={false}><AboutScreen /></ProtectedRoute></Layout>} />
       
       {/* Trainer Routes */}
       <Route path="/trainer" element={<Layout><TrainerDashboardScreen /></Layout>} />
@@ -75,6 +79,16 @@ function App() {
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   )
+}
+
+function App() {
+  const { loading } = useAuth()
+
+  if (loading) {
+    return <SplashScreen />
+  }
+
+  return <AppRoutes />
 }
 
 export default App
